@@ -1,0 +1,21 @@
+{
+  "test": "Hello!",
+  
+  "cmake.statusbar.advanced": {
+    "debug": {
+        "visibility": "hidden"
+    },
+    "launch": {
+        "visibility": "hidden"
+    },
+    "build": {
+        "visibility": "default"
+    },
+    "buildTarget": {
+        "visibility": "hidden"
+    }
+  },
+
+  "cmake.generator": "Ninja",
+  "cmake.buildDirectory": "${workspaceRoot}/build/${variant:buildTarget}",
+}

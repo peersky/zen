@@ -1,0 +1,6 @@
+[submodule "3rd_party/STM32CubeF4"]
+    path = 3rd_party/STM32CubeF4
+    url = https://github.com/STMicroelectronics/STM32CubeF4.git
+[submodule "3rd_party/JUCE"]
+    path = 3rd_party/JUCE
+    url = https://github.com/juce-framework/JUCE.git

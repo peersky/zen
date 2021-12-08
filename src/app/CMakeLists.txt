@@ -1,0 +1,5 @@
+if(SIM)
+  add_subdirectory(sim)
+else()
+  add_subdirectory(black-delay)
+endif()

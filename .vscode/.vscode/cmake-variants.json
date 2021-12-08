@@ -1,0 +1,40 @@
+{
+  "buildOpt" : {
+    "default": "debug",
+    "description": "Build type option (Debug/Release)",
+    "choices": {
+        "debug": {
+            "short": "Debug",
+            "long": "Debug build (code not optimized and with debug info)",
+            "buildType": "Debug"
+        },
+        "release": {
+            "short": "Release",
+            "long": "Release build (code optimized without debug info) including final deliverables",
+            "buildType": "Release"
+        }
+    }
+  },
+
+  "buildTarget" : {
+      "default": "sim",
+      "description": "Simulator Build target option",
+      "choices": {
+          "sim": {
+              "short": "Sim",
+              "long": "Simulator build target",
+              "settings": {
+                  "BUILD_TYPE": "sim",
+                  "BOARD": "simulator"
+              }
+          },
+          "stm32": {
+              "short": "STM32",
+              "long": "STM32 Firmware build target",
+              "settings": {
+                  "BUILD_TYPE": "stm32"
+              }
+          }
+      }
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "version": "2.0.0",
+  "tasks":[
+    {
+      "label": "ninja",
+      "type": "shell",
+      "options": {
+        "cwd": "${command:cmake.buildDirectory}"
+      },
+      "command": "ninja",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "dependsOn": "cmake"
+    },
+    
+    {
+      "label": "cmake",
+      "type": "shell",
+      "options": {
+        "cwd": "${command:cmake.buildDirectory}"
+      },
+      "command": "cmake ./../.. -GNinja",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "dependsOn": "mkBuildDir"
+    },
+
+    {
+      "label": "mkBuildDir",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceRoot}"
+      },
+      "command": "mkdir -p \"${command:cmake.buildDirectory}\""
+    },
+
+    // {
+    //   "label": "clean",
+    //   "type": "shell",
+    //   "options": {
+    //     "cwd": "${workspaceRoot}"
+    //   },
+    //   "command": "rm -r \"${command:cmake.buildDirectory}\"",
+    //   "group": "build",
+    //   "problemMatcher": []
+    // },
+
+    {
+      "label": "run simulator",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceRoot}"
+      },
+      "command": "${command:cmake.launchTargetPath}",
+      "group": "build",
+      "problemMatcher": []
+    },
+
+    {
+      "label": "flash",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceRoot}"
+      },
+      "command": "openocd -f board/st_nucleo_h745zi.cfg -c 'program ${command:cmake.launchTargetPath} verify reset exit'",
+      "group": "build",
+      "problemMatcher": []
+    },
+  ]
+}
