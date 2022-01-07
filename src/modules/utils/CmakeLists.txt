@@ -1,0 +1,4 @@
+target_sources(AudioPluginExample PRIVATE
+zen_memory.cpp
+assert.c
+)

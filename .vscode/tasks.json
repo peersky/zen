@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "tasks":[
+  "tasks": [
     {
       "label": "ninja",
       "type": "shell",
@@ -15,7 +15,21 @@
       },
       "dependsOn": "cmake"
     },
-    
+    // {
+    //   "label": "make",
+    //   "type": "shell",
+    //   "options": {
+    //     "cwd": "${command:cmake.buildDirectory}"
+    //   },
+    //   "command": "make",
+    //   "problemMatcher": [],
+    //   "group": {
+    //     "kind": "build",
+    //     "isDefault": true
+    //   },
+    //   "dependsOn": "cmake"
+    // },
+
     {
       "label": "cmake",
       "type": "shell",
@@ -40,16 +54,16 @@
       "command": "mkdir -p \"${command:cmake.buildDirectory}\""
     },
 
-    // {
-    //   "label": "clean",
-    //   "type": "shell",
-    //   "options": {
-    //     "cwd": "${workspaceRoot}"
-    //   },
-    //   "command": "rm -r \"${command:cmake.buildDirectory}\"",
-    //   "group": "build",
-    //   "problemMatcher": []
-    // },
+    {
+      "label": "clean",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceRoot}"
+      },
+      "command": "rm -r \"${command:cmake.buildDirectory}\"",
+      "group": "build",
+      "problemMatcher": []
+    },
 
     {
       "label": "run simulator",
@@ -71,6 +85,6 @@
       "command": "openocd -f board/st_nucleo_h745zi.cfg -c 'program ${command:cmake.launchTargetPath} verify reset exit'",
       "group": "build",
       "problemMatcher": []
-    },
+    }
   ]
 }

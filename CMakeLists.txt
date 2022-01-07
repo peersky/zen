@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13)
-
+# set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "") # works
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 # Setup Toolchain, Platform, Board
@@ -16,7 +16,6 @@ message("Toolchain: ${TOOLCHAIN}")
 
 # Start Project
 project(Black_Delay)
-
 
 # Add subdirectories
 add_subdirectory(3rd_party)

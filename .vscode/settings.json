@@ -1,0 +1,25 @@
+{
+  "cmake.statusbar.advanced": {
+    "debug": {
+      "visibility": "hidden"
+    },
+    "launch": {
+      "visibility": "hidden"
+    },
+    "build": {
+      "visibility": "default"
+    },
+    "buildTarget": {
+      "visibility": "hidden"
+    }
+  },
+
+  "cmake.buildDirectory": "${workspaceRoot}/build/${variant:buildTarget}",
+  // "cmake.configureArgs": ["-D${variant:project}"],
+  "python.linting.enabled": false,
+  "cmake.generator": "Ninja",
+  "files.associations": {
+    "assert.h": "c"
+  }
+  // "cmake.buildArgs": ["-fdiagnostics-color=always"]
+}

@@ -1,4 +1,4 @@
-set(available_boards "black_delay" "simulator")
+set(available_boards "black_delay" "simulator" "plugin")
 set(BOARD "black_delay" CACHE STRING "Board type")
 set_property(CACHE BOARD PROPERTY STRINGS ${available_boards})
 
@@ -25,5 +25,5 @@ function(add_board_source_file list source)
     "${CMAKE_CURRENT_SOURCE_DIR}/${source}"
     PARENT_SCOPE
     )
-  
+
 endfunction(add_board_source_file)

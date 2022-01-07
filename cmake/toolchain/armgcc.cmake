@@ -6,7 +6,7 @@ if(NOT DEFINED ARM_NONE_EABI_TOOLCHAIN_BIN_PATH)
 
   # Apple
   if(APPLE)
-    find_program(arm_gcc "/usr/local/bin/arm-none-eabi-gcc")
+    find_program(arm_gcc "/Applications/ARM/gcc-arm-none-eabi-10.3-2021.10/bin/arm-none-eabi-gcc")
 
     if(NOT arm_gcc)
       message(FATAL_ERROR "No arm-none-eabi-gcc toolchain found! Fix cmake/toolchain/armgcc.make!")
@@ -15,7 +15,7 @@ if(NOT DEFINED ARM_NONE_EABI_TOOLCHAIN_BIN_PATH)
     get_filename_component(arm_gcc_path ${arm_gcc} DIRECTORY)
 
     set(ARM_NONE_EABI_TOOLCHAIN_BIN_PATH ${arm_gcc_path})
-  
+
   # Unix
   elseif(UNIX AND NOT APPLE)
     find_program(arm_gcc "/usr/bin/arm-none-eabi-gcc")

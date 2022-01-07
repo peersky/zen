@@ -37,6 +37,6 @@ target_link_libraries(${target} PRIVATE
   segger_rtt
   )
 
-# 
+#
 add_platform_linker_file(${target} ${CMAKE_CURRENT_SOURCE_DIR}/STM32F429ZITx_FLASH.ld)
 add_platform_executable(${target})

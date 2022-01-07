@@ -1,6 +1,7 @@
 
-if(SIM)
-  add_subdirectory(3rd_party/JUCE)
+if(SIM OR VST)
+  message("adding JUCE")
+  add_subdirectory(JUCE)
 else()
   include(SeggerRTT.cmake)
   include(STM32Cube.cmake)

@@ -1,0 +1,5 @@
+message("adding zen mk2 project")
+target_sources(AudioPluginExample PRIVATE
+App.cpp
+AppWrapper.cpp
+)
