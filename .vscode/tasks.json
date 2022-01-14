@@ -73,7 +73,8 @@
       },
       "command": "${command:cmake.launchTargetPath}",
       "group": "build",
-      "problemMatcher": []
+      "problemMatcher": [],
+      "dependsOn": "ninja"
     },
 
     {
