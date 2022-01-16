@@ -25,8 +25,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-#include "UIComponent.h"
-
 //==============================================================================
 ZenAudioProcessorEditor::ZenAudioProcessorEditor(ZenAudioProcessor &p)
     : AudioProcessorEditor(&p), uicomponent_(p), processor_(p)
@@ -61,7 +59,7 @@ void ZenAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
     start_ = false;
     ramp_ = false;
 
-    ZENTest_init(sampleRate, samplesPerBlock);
+    JuceAppInit(sampleRate, samplesPerBlock);
     outputAnalyser_.setupAnalyser(int(sampleRate), float(sampleRate));
     //	outputAnalyser.stopThread(1000);
     spectrumBuffer.setSize(2, samplesPerBlock);
@@ -79,7 +77,6 @@ void ZenAudioProcessor::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midi
     for (int i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
 
-    ZENTest_block();
 
     MidiMessage m;
     for (MidiMessageMetadata metadata : midiMessages)
@@ -90,11 +87,11 @@ void ZenAudioProcessor::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midi
 
         if (m.isNoteOn())
         {
-            ZENTest_noteOn(noteNumber, velocity);
+            JuceAppNoteOn(noteNumber, velocity);
         }
         else if (m.isNoteOff())
         {
-            ZENTest_noteOff(noteNumber);
+            JuceAppNoteOff(noteNumber);
         }
         else
         {
@@ -115,7 +112,8 @@ void ZenAudioProcessor::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midi
     //        outPointerL[samp] = ZENTest_tick( (inPointerL[samp] + inPointerR[samp]) * 0.5f )/10.0f;
     //        outPointerR[samp] = outPointerL[samp];
     //    }
-    ZENTest_processBlock(in, out, 2, buffer.getNumSamples());
+
+    JuceApp_processBlock(in, out, 2, buffer.getNumSamples());
     if (buffer.getNumSamples() != spectrumBuffer.getNumSamples())
     {
         spectrumBuffer.setSize(buffer.getNumChannels(), buffer.getNumSamples());
@@ -202,7 +200,7 @@ void ZenAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
-    ZENTest_end();
+    // ZENTest_end();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations

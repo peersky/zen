@@ -1,18 +1,18 @@
 /*
  MIT License
- 
+
  Copyright (c) 2021 Tim Pechersky
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in all
  copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,36 +22,32 @@
  SOFTWARE.
  */
 
-
+#include <JuceHeader.h>
 #include "AppWrapper.h"
+#include "JuceApp.hpp"
+#include "../../modules/utils/tables.h"
 #include <algorithm>
 
 #define MYTEST 0
-#define FM     1
+#define FM 1
 
-std::vector<juce::String> cButtonNames =  std::vector<juce::String>
-{
-    "load"
-};
+std::vector<juce::String> cButtonNames = std::vector<juce::String>{
+    "load"};
 
 std::vector<juce::String> cSliderNames(SLIDER_NUM_ENUM);
-std::vector<juce::String> cLabelNames =  std::vector<juce::String>
-{
-	"Freq",
-	"Alpha",
-	"Beta",
-	"Omega",
+std::vector<juce::String> cLabelNames = std::vector<juce::String>{
+    "Freq",
+    "Alpha",
+    "Beta",
+    "Omega",
 };
 
+std::vector<juce::String> cComboBoxNames = std::vector<juce::String>{
 
-std::vector<juce::String> cComboBoxNames =  std::vector<juce::String>
-{
-    
 };
 
-std::vector<juce::String> cWaveformTypes =  std::vector<juce::String>
-{
-    
+std::vector<juce::String> cWaveformTypes = std::vector<juce::String>{
+
 };
 
 std::vector<float> cSliderModelValues(cSliderNames.size());
@@ -94,7 +90,7 @@ bool getButtonState(String name)
             return cButtonStates[i];
         }
     }
-    
+
     return false;
 }
 
@@ -147,27 +143,110 @@ void setSliderValue(String name, float val)
     }
 }
 
-
-
 void setLabelValue_f(float **pVal)
 {
-	for (int i = 0; i<4; i++)
-	{
-		cLabelValues[i] = *pVal[i];
-	}
-	
-	
+    for (int i = 0; i < 4; i++)
+    {
+        cLabelValues[i] = *pVal[i];
+    }
 }
-
-
-
 
 float getRandomFloat(void)
 {
-    return ((float)rand()/RAND_MAX);
+    return ((float)rand() / RAND_MAX);
 }
 
 void getZenValues()
 {
-	
+}
+
+void slidersConstruct()
+{
+
+    float step12b = 1.0f / 4096.0f;
+    setSlider(SLIDER_DELAY, "Delay", 0, 3000, step12b, 0.5f, "ms");
+    setSlider(SLIDER_SPREAD, "Spread", 0, 50, step12b, 0.5f, "ms");
+    setSlider(SLIDER_FEEDBACK, "Feedback", 0, 1.1, step12b, 0.5f, "%");
+    setSlider(SLIDER_LFO_FREQ, "LFO", 0, 1000, step12b, 0.5f, "Hz");
+    setSlider(SLIDER_FILTER_RESO, "Q", 0, 1000, step12b, 0.5f, "");
+    setSlider(SLIDER_REVERB_SIZE, "Size", 0, 1, step12b, 0.5f, "");
+    setSlider(SLIDER_REVERB_DECAY, "Decay", 0, 1, step12b, 0.5f, "");
+    setSlider(SLIDER_FILTER_CUTOFF, "Fc", 0, 10000, step12b, 0.5f, "Hz");
+    setSlider(SLIDER_MODULATION_DEPTH, "M Depth", 0, 1, step12b, 1, "%");
+}
+
+//template <String &name>
+inline void setSlider(SlidersEnum slider, String name, float min, float max, float step, float skew, String suffix)
+{
+    cSliderNames[slider] = name;
+    cSliderRangesMax[slider] = max;
+    cSliderRangesMin[slider] = min;
+    cSliderSteps[slider] = max * step;
+    cSliderSkew[slider] = skew;
+    cSliderSuffix[slider] = suffix;
+}
+
+inline void setSliderValue(SlidersEnum slider, float val)
+{
+    cSliderValues[slider] = val;
+}
+
+//template <String &name>
+float getSliderValue(SlidersEnum i)
+{
+    float value = 0.0f;
+    value = cSliderValues[i];
+
+    if (i == SLIDER_FEEDBACK)
+    {
+        float range = cSliderRangesMax[i] - cSliderRangesMin[i];
+        float invStep = 4095.0f / range;
+        float indexf = value * invStep;
+        size_t index = (size_t)indexf;
+        return zen_Feedback_Shape[index];
+    }
+
+    return value;
+}
+
+inline void setLabelValue(float *pVal)
+{
+    for (int i = 0; i < 4; i++)
+    {
+        cLabelValues[i] = (float)pVal[i];
+    }
+}
+
+void JuceAppInit(double sampleRate, int samplesPerBlock)
+{
+    setSliderValue(SLIDER_DELAY, 100);
+    setSliderValue(SLIDER_SPREAD, 0);
+    setSliderValue(SLIDER_FEEDBACK, 0.1);
+    setSliderValue(SLIDER_LFO_FREQ, 440);
+    setSliderValue(SLIDER_MODULATION_DEPTH, 0);
+    setSliderValue(SLIDER_FILTER_CUTOFF, 440);
+    setSliderValue(SLIDER_FILTER_RESO, 10);
+    setSliderValue(SLIDER_REVERB_DECAY, 0.5);
+    setSliderValue(SLIDER_REVERB_SIZE, 0);
+
+    ZENTest_init(sampleRate, samplesPerBlock);
+}
+void JuceAppNoteOn(int midiNoteNumber, float velocity)
+{
+}
+void JuceAppNoteOff(int midiNoteNumber)
+{
+}
+
+float UIlabels[SLIDER_NUM_ENUM];
+
+void JuceApp_processBlock(const float **in, float **out, int chan_num, size_t size)
+{
+
+    //ToDo: Need to implement getters from app to pass in here
+    // UIlabels[0] = (float)stereoDelay.getChannelDelay_ms(0);
+    // UIlabels[1] = sliderInterpolator[SLIDER_DELAY].a_;
+    setLabelValue(UIlabels);
+
+    ZENTest_processBlock(in, out, chan_num, size);
 }

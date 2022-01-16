@@ -22,9 +22,9 @@
  SOFTWARE.
  */
 
-#include "UIComponent.h"
-#include "SpectrumAnalyzer.h"
-#include "PluginProcessor.h"
+#include "UIComponent.hpp"
+#include "../../modules/ui/SpectrumAnalyzer.h"
+#include "../../target/plugin/PluginProcessor.h"
 #include "../../app/zen_mk2/AppWrapper.h"
 #include <cmath>
 

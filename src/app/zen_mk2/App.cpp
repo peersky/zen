@@ -22,7 +22,7 @@
  SOFTWARE.
  */
 
-#include "AppWrapper.h"
+#include "App.h"
 #include <math.h>
 
 zen::AudioInstance ZenInstance;
@@ -53,7 +53,7 @@ zen::Svf filterTest;
 zen::Delay<float, 48000, 2> stereoDelay(ZenInstance);
 zen::Reverb<float, 144000, 2, 4> stereoReverb(ZenInstance);
 
-float UIlabels[SLIDER_NUM_ENUM];
+
 float delta;
 
 #define ZEN_BLOCK_SIZE 64
@@ -130,39 +130,15 @@ void ZENTest_init(float sampleRate, int blockSize)
 
 	stereoReverb.setDelayType(zen::reverbTypes::one);
 
-	setSliderValue(SLIDER_DELAY, 100);
 	sliderInterpolator[SLIDER_DELAY].prepareToPlay(100, 1);
-
-	setSliderValue(SLIDER_SPREAD, 0);
 	sliderInterpolator[SLIDER_SPREAD].prepareToPlay(0, 1);
-
-	setSliderValue(SLIDER_FEEDBACK, 0.1);
 	sliderInterpolator[SLIDER_FEEDBACK].prepareToPlay(0, 1);
-
-	setSliderValue(SLIDER_LFO_FREQ, 440);
 	sliderInterpolator[SLIDER_LFO_FREQ].prepareToPlay(10, 1);
-
-	setSliderValue(SLIDER_MODULATION_DEPTH, 0);
 	sliderInterpolator[SLIDER_MODULATION_DEPTH].prepareToPlay(0, 1);
-
-	setSliderValue(SLIDER_FILTER_CUTOFF, 440);
 	sliderInterpolator[SLIDER_FILTER_CUTOFF].prepareToPlay(440, 1);
-
-	setSliderValue(SLIDER_FILTER_RESO, 10);
 	sliderInterpolator[SLIDER_FILTER_RESO].prepareToPlay(10, 1);
-
-	setSliderValue(SLIDER_REVERB_DECAY, 0.5);
 	sliderInterpolator[SLIDER_REVERB_DECAY].prepareToPlay(0.5, 1);
-
-	setSliderValue(SLIDER_REVERB_SIZE, 0);
 	sliderInterpolator[SLIDER_REVERB_SIZE].prepareToPlay(0, 1);
-}
-
-void update_UI()
-{
-	UIlabels[0] = (float)stereoDelay.getChannelDelay_ms(0);
-	UIlabels[1] = sliderInterpolator[SLIDER_DELAY].a_;
-	setLabelValue(UIlabels);
 }
 
 size_t getZenBlockNum(size_t JUCE_BlockSize)
@@ -177,7 +153,6 @@ void setDebugStuff(float *ch1, float *ch2, size_t size)
 }
 void ZENTest_processBlock(const float **in, float **out, int chan_num, size_t size)
 {
-	update_UI();
 
 	for (int slider_num = 0; slider_num < SLIDER_NUM_ENUM; slider_num++)
 	{
@@ -189,12 +164,12 @@ void ZENTest_processBlock(const float **in, float **out, int chan_num, size_t si
 	wave.setFreq(waveFreq);
 	float LFOVals[size];
 	lfo.processBlock(LFOVals, sliders_blocks[SLIDER_LFO_FREQ], size);
-	wave.processBlock(out[0], sliders_blocks[SLIDER_LFO_FREQ], size);
-	memcpy(out[0], in[0], 4 * size);
-	memcpy(out[1], out[0], 4 * size);
+	// wave.processBlock(out[0], sliders_blocks[SLIDER_LFO_FREQ], size);
+	// memcpy(out[0], in[0], 4 * size);
+	// memcpy(out[1], out[0], 4 * size);
 
-	//	stereoReverb.setFeedbackType(zen::FEEDBACK_TYPE_PING_PONG);
-	//	stereoReverb.processBlock((const float **)out,out, sliders_blocks[SLIDER_DELAY], (float**)delay_offsets, size, sliders_blocks[SLIDER_FEEDBACK], 0.5f);
+	// stereoReverb.setFeedbackType(zen::FEEDBACK_TYPE_PING_PONG);
+	// stereoReverb.processBlock((const float **)out, out, sliders_blocks[SLIDER_DELAY], (float **)delay_offsets, size, sliders_blocks[SLIDER_FEEDBACK], 0.5f);
 	delayProperties.delay = sliders_blocks[SLIDER_DELAY];
 	delayProperties.feedback = sliders_blocks[SLIDER_FEEDBACK];
 	float preDelay[1] = {0};
@@ -211,19 +186,5 @@ void ZENTest_processBlock(const float **in, float **out, int chan_num, size_t si
 
 int firstFrame = 1;
 bool lastState = false, lastPlayState = false;
-void ZENTest_block(void)
-{
-}
 
 int lastNote;
-void ZENTest_noteOn(int note, float velocity)
-{
-}
-
-void ZENTest_noteOff(int note)
-{
-}
-
-void ZENTest_end(void)
-{
-}

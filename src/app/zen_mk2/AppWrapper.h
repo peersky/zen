@@ -22,119 +22,45 @@
  SOFTWARE.
  */
 
-#pragma once
+/*
+    This wrapper should declare API interface to application target
+    Whether it is VST/Standalone/Embedded or any other target
+    It must implement methods that are declared here
+*/
 
-// #include "../JuceLibraryCode/JuceHeader.h"
-#include <JuceHeader.h>
-#include "../../modules/dsp/Interpolator.h"
-#include "../../modules/utils/tables.h"
-#include "../../modules/zen.h"
-#include "stdlib.h"
-
-enum SlidersEnum
+#ifndef APP_TARGET_WRAPPER_
+#define APP_TARGET_WRAPPER_
+#ifdef __cplusplus
+extern "C"
 {
-	SLIDER_DELAY = 0,
-	SLIDER_SPREAD,
-	SLIDER_FEEDBACK,
-	SLIDER_LFO_FREQ,
-	SLIDER_MODULATION_DEPTH,
-	SLIDER_FILTER_CUTOFF,
-	SLIDER_FILTER_RESO,
-	SLIDER_REVERB_DECAY,
-	SLIDER_REVERB_SIZE,
-	SLIDER_NUM_ENUM
-};
+#endif
 
-extern std::vector<juce::String> cSliderNames;
+    enum SlidersEnum
+    {
+        SLIDER_DELAY = 0,
+        SLIDER_SPREAD,
+        SLIDER_FEEDBACK,
+        SLIDER_LFO_FREQ,
+        SLIDER_MODULATION_DEPTH,
+        SLIDER_FILTER_CUTOFF,
+        SLIDER_FILTER_RESO,
+        SLIDER_REVERB_DECAY,
+        SLIDER_REVERB_SIZE,
+        SLIDER_NUM_ENUM
+    };
 
-extern std::vector<juce::String> cButtonNames;
+    void printSliderValues(void);
 
-extern std::vector<juce::String> cComboBoxNames;
+    //float getSliderValue(String name);
+    //void setLabelValue_f(float **pVal);
+    float getRandomFloat(void);
+    inline void setLabelValue(float *pVal);
+    float getSliderValue(SlidersEnum i);
+    void slidersConstruct();
+    inline void setSliderValue(SlidersEnum slider, float val);
 
-extern std::vector<juce::String> cWaveformTypes;
-
-extern std::vector<float> cSliderValues;
-
-extern std::vector<float> cSliderModelValues;
-
-extern std::vector<bool> cButtonStates;
-
-extern std::vector<int> cComboBoxStates;
-
-extern std::vector<float> cSliderSteps;
-extern std::vector<float> cSliderRangesMin;
-extern std::vector<float> cSliderRangesMax;
-extern std::vector<float> cSliderSkew;
-extern std::vector<juce::String> cSliderSuffix;
-extern std::vector<float> cLabelValues;
-extern std::vector<juce::String> cLabelNames;
-
-extern Array<AudioBuffer<float>> loadedAudio;
-
-void printSliderValues(void);
-bool getButtonState(String name);
-void setButtonState(String name, bool on);
-int getComboBoxState(String name);
-void setComboBoxState(String name, int idx);
-void setSliderModelValue(String name, float val);
-void setSliderValue(String name, float val);
-//float getSliderValue(String name);
-float getRandomFloat(void);
-//void setLabelValue_f(float **pVal);
-
-template <typename T>
-inline void setLabelValue(T *pVal)
-{
-	for (int i = 0; i < 4; i++)
-	{
-		cLabelValues[i] = (float)pVal[i];
-	}
+#ifdef __cplusplus
 }
+#endif
 
-//template <String &name>
-inline float getSliderValue(SlidersEnum i)
-{
-	float value = 0.0f;
-	value = cSliderValues[i];
-
-	if (i == SLIDER_FEEDBACK)
-	{
-		float range = cSliderRangesMax[i] - cSliderRangesMin[i];
-		float invStep = 4095.0f / range;
-		float indexf = value * invStep;
-		size_t index = (size_t)indexf;
-		return zen_Feedback_Shape[index];
-	}
-
-	return value;
-}
-//template <String &name>
-inline void setSlider(SlidersEnum slider, String name, float min, float max, float step, float skew, String suffix)
-{
-	cSliderNames[slider] = name;
-	cSliderRangesMax[slider] = max;
-	cSliderRangesMin[slider] = min;
-	cSliderSteps[slider] = max * step;
-	cSliderSkew[slider] = skew;
-	cSliderSuffix[slider] = suffix;
-}
-
-inline void slidersConstruct()
-{
-
-	float step12b = 1.0f / 4096.0f;
-	setSlider(SLIDER_DELAY, "Delay", 0, 3000, step12b, 0.5f, "ms");
-	setSlider(SLIDER_SPREAD, "Spread", 0, 50, step12b, 0.5f, "ms");
-	setSlider(SLIDER_FEEDBACK, "Feedback", 0, 1.1, step12b, 0.5f, "%");
-	setSlider(SLIDER_LFO_FREQ, "LFO", 0, 1000, step12b, 0.5f, "Hz");
-	setSlider(SLIDER_FILTER_RESO, "Q", 0, 1000, step12b, 0.5f, "");
-	setSlider(SLIDER_REVERB_SIZE, "Size", 0, 1, step12b, 0.5f, "");
-	setSlider(SLIDER_REVERB_DECAY, "Decay", 0, 1, step12b, 0.5f, "");
-	setSlider(SLIDER_FILTER_CUTOFF, "Fc", 0, 10000, step12b, 0.5f, "Hz");
-	setSlider(SLIDER_MODULATION_DEPTH, "M Depth", 0, 1, step12b, 1, "%");
-}
-
-inline void setSliderValue(SlidersEnum slider, float val)
-{
-	cSliderValues[slider] = val;
-}
+#endif //APP_TARGET_WRAPPER_

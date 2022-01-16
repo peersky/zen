@@ -25,12 +25,8 @@
 #ifndef PLUGINPROCESSOR_H_INCLUDED
 #define PLUGINPROCESSOR_H_INCLUDED
 
-// #include "../JuceLibraryCode/JuceHeader.h"
-// #include juce_audio_processors/juce_audio_processors.h>
 #include <JuceHeader.h>
-#include "SpectrumAnalyzer.h"
-#include "PluginProcessor.h"
-#include "../../app/zen_mk2/App.h"
+#include "../../app/zen_mk2/JuceApp.hpp"
 
 //==============================================================================
 /**

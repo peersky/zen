@@ -1,5 +1,13 @@
 message("adding zen mk2 project")
+
 target_sources(AudioPluginExample PRIVATE
 App.cpp
-AppWrapper.cpp
 )
+if(VST)
+target_sources(AudioPluginExample PRIVATE
+JuceApp.cpp
+UIComponent.cpp
+)
+else()
+    message(FATAL_ERROR "Wooop woop! Failed to include target platform implementation wrapper")
+endif()

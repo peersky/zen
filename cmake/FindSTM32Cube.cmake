@@ -16,28 +16,28 @@ message(STATUS "STM32Cube library found!")
 # HAL Drivers for F4 familiy
 set(f4_hal_drivers
   adc can cec cortex crc cryp dac dcmi dfsdm dma dma2d dsi exti flash
-  flash_ramfunc fmpi2c gpio hash hcd i2c i2s irda iwdg lptim ltdc mmc nand nor 
-  pccard pcd pwr qspi rcc rng rtc sai sd sdram smartcard smbus spdifrx spi 
+  flash_ramfunc fmpi2c gpio hash hcd i2c i2s irda iwdg lptim ltdc mmc nand nor
+  pccard pcd pwr qspi rcc rng rtc sai sd sdram smartcard smbus spdifrx spi
   sram tim uart usart wwdg
 
-  adc_ex cryp_ex dac_ex dcmi_ex dma_ex flash_ex fmpi2c_ex hash_ex i2c_ex 
-  i2s_ex ltdc_ex pcd_ex pwr_ex rcc_ex rtc_ex sai_ex tim_ex 
+  adc_ex cryp_ex dac_ex dcmi_ex dma_ex flash_ex fmpi2c_ex hash_ex i2c_ex
+  i2s_ex ltdc_ex pcd_ex pwr_ex rcc_ex rtc_ex sai_ex tim_ex
 )
 
 # LL Drivers for F4 familiy
 set(f4_ll_drivers
-  adc crc dac dma dma2d exti fmc fsmc gpio i2c lptim pwr rcc rng rtc sdmmc spi 
-  tim usart usb utils 
+  adc crc dac dma dma2d exti fmc fsmc gpio i2c lptim pwr rcc rng rtc sdmmc spi
+  tim usart usb utils
 )
 
 
 
-# Get Familiy 
+# Get Familiy
 find_file(PACKAGE_FILE NAMES package.xml PATHS ${cube_path})
 if(PACKAGE_FILE)
   file(READ ${PACKAGE_FILE} PACKAGE_FILE_CONTENT)
 
-  string(REGEX MATCH "PackDescription Release=\"FW.F([0-9])." FAMILY_SYM ${PACKAGE_FILE_CONTENT}) 
+  string(REGEX MATCH "PackDescription Release=\"FW.F([0-9])." FAMILY_SYM ${PACKAGE_FILE_CONTENT})
   if(CMAKE_MATCH_1)
     set(FAMILY "F${CMAKE_MATCH_1}")
   else()
@@ -50,7 +50,7 @@ endif()
 message(STATUS "Found STM32${FAMILY}Cube")
 
 # Lower case familiy name
-string(TOLOWER ${FAMILY} FAMILY_L)  
+string(TOLOWER ${FAMILY} FAMILY_L)
 
 # Get Paths
 set(drivers_path "${cube_path}/Drivers")

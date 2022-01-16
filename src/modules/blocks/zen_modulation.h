@@ -13,7 +13,7 @@ extern "C"
 {
 #endif
 
-#include "zen_wave.h"
+#include "wave.h"
 
 typedef enum
 {

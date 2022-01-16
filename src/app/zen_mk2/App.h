@@ -26,8 +26,10 @@
 
 #define ZEN_USE_DYNAMIC_ALLOCATION 0
 
-#include "AppWrapper.h"
+#include "../../modules/dsp/Interpolator.h"
+#include "../../modules/utils/tables.h"
 #include "../../modules/zen.h"
+#include "AppWrapper.h"
 
 //ZEN API
 void setDebugStuff(float *ch1, float *ch2, size_t size);
