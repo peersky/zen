@@ -123,7 +123,7 @@ void ZenAudioProcessor::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midi
     //	ZENTest_tick( (inPointerL[samp] + inPointerR[samp]) * 0.5f )/10.0f;
 
     if (getActiveEditor() != nullptr)
-        outputAnalyser_.addAudioData(spectrumBuffer, 0, getTotalNumOutputChannels());
+        outputAnalyser_.addAudioData(buffer, 0, getTotalNumOutputChannels());
 }
 
 //==============================================================================

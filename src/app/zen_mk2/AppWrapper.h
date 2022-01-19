@@ -25,7 +25,9 @@
 /*
     This wrapper should declare API interface to application target
     Whether it is VST/Standalone/Embedded or any other target
-    It must implement methods that are declared here
+    It must implement methods that are declared in target interface section
+
+    It also implements interface from target down to APP trough
 */
 
 #ifndef APP_TARGET_WRAPPER_
@@ -54,10 +56,10 @@ extern "C"
     //float getSliderValue(String name);
     //void setLabelValue_f(float **pVal);
     float getRandomFloat(void);
-    inline void setLabelValue(float *pVal);
+    void setLabelValue(float (&pVal)[SLIDER_NUM_ENUM]);
     float getSliderValue(SlidersEnum i);
     void slidersConstruct();
-    inline void setSliderValue(SlidersEnum slider, float val);
+    void setSliderValue(SlidersEnum slider, float val);
 
 #ifdef __cplusplus
 }

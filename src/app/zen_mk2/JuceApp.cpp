@@ -209,7 +209,7 @@ float getSliderValue(SlidersEnum i)
     return value;
 }
 
-inline void setLabelValue(float *pVal)
+void setLabelValue(float (&pVal)[SLIDER_NUM_ENUM])
 {
     for (int i = 0; i < 4; i++)
     {
@@ -231,6 +231,7 @@ void JuceAppInit(double sampleRate, int samplesPerBlock)
 
     ZENTest_init(sampleRate, samplesPerBlock);
 }
+
 void JuceAppNoteOn(int midiNoteNumber, float velocity)
 {
 }
@@ -238,15 +239,8 @@ void JuceAppNoteOff(int midiNoteNumber)
 {
 }
 
-float UIlabels[SLIDER_NUM_ENUM];
-
 void JuceApp_processBlock(const float **in, float **out, int chan_num, size_t size)
 {
-
-    //ToDo: Need to implement getters from app to pass in here
-    // UIlabels[0] = (float)stereoDelay.getChannelDelay_ms(0);
-    // UIlabels[1] = sliderInterpolator[SLIDER_DELAY].a_;
-    setLabelValue(UIlabels);
 
     ZENTest_processBlock(in, out, chan_num, size);
 }

@@ -27,6 +27,7 @@
 #include "../../target/plugin/PluginProcessor.h"
 #include "../../app/zen_mk2/AppWrapper.h"
 #include <cmath>
+#include <array>
 
 static float maxDB = 12.0f;
 static float minDB = -120.0f;
@@ -196,6 +197,14 @@ void UIComponent::timerCallback(void)
 	}
 	//	createZenCircle(zenPath);
 	//		repaint ();
+
+	//ToDo: Need to implement getters from app to pass in here
+   
+    // setLabelValue();
+
+	UILabelsTypeDef &ref = getUIValues();
+	setLabelValue(ref);
+
 }
 
 void UIComponent::textEditorTextChanged(TextEditor &tf)

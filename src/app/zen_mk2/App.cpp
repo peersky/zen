@@ -24,6 +24,7 @@
 
 #include "App.h"
 #include <math.h>
+#include <array>
 
 zen::AudioInstance ZenInstance;
 
@@ -53,7 +54,6 @@ zen::Svf filterTest;
 zen::Delay<float, 48000, 2> stereoDelay(ZenInstance);
 zen::Reverb<float, 144000, 2, 4> stereoReverb(ZenInstance);
 
-
 float delta;
 
 #define ZEN_BLOCK_SIZE 64
@@ -61,8 +61,12 @@ float delta;
 float slider2_block[ZEN_BLOCK_SIZE];
 float slider3_block[ZEN_BLOCK_SIZE];
 
-float sliders_blocks[SLIDER_NUM_ENUM][2048];
+// float sliders_blocks[SLIDER_NUM_ENUM][2048];
 float delay_offsets_[NUM_DELAY_CHANNELS][2048] = {0};
+UILabelsTypeDef UIlabels;
+//
+zenSliders sliders_blocks;
+// std:array<slider, SLIDER_NUM_ENUM> sliders;
 float **delay_offsets = new float *[NUM_DELAY_CHANNELS];
 float wave_out[2048];
 
@@ -156,22 +160,22 @@ void ZENTest_processBlock(const float **in, float **out, int chan_num, size_t si
 
 	for (int slider_num = 0; slider_num < SLIDER_NUM_ENUM; slider_num++)
 	{
-		sliderInterpolator[slider_num].processBlock(getSliderValue((SlidersEnum)slider_num), sliders_blocks[slider_num], size, 1);
+		sliderInterpolator[slider_num].processBlock(getSliderValue((SlidersEnum)slider_num), &sliders_blocks[slider_num][0], size, 1);
 	}
-	memcpy(delay_offsets[1], sliders_blocks[SLIDER_SPREAD], 4 * size);
+	memcpy(delay_offsets[1], &sliders_blocks[SLIDER_SPREAD][0], 4 * size);
 	stereoReverb.setDecay(getSliderValue(SLIDER_REVERB_DECAY));
 	float waveFreq = 440;
 	wave.setFreq(waveFreq);
 	float LFOVals[size];
-	lfo.processBlock(LFOVals, sliders_blocks[SLIDER_LFO_FREQ], size);
+	lfo.processBlock(LFOVals, &sliders_blocks[SLIDER_LFO_FREQ][0], size);
 	// wave.processBlock(out[0], sliders_blocks[SLIDER_LFO_FREQ], size);
 	// memcpy(out[0], in[0], 4 * size);
 	// memcpy(out[1], out[0], 4 * size);
 
 	// stereoReverb.setFeedbackType(zen::FEEDBACK_TYPE_PING_PONG);
 	// stereoReverb.processBlock((const float **)out, out, sliders_blocks[SLIDER_DELAY], (float **)delay_offsets, size, sliders_blocks[SLIDER_FEEDBACK], 0.5f);
-	delayProperties.delay = sliders_blocks[SLIDER_DELAY];
-	delayProperties.feedback = sliders_blocks[SLIDER_FEEDBACK];
+	delayProperties.delay = &sliders_blocks[SLIDER_DELAY][0];
+	delayProperties.feedback = &sliders_blocks[SLIDER_FEEDBACK][0];
 	float preDelay[1] = {0};
 	float outGain[1] = {1};
 	delayProperties.outGain = outGain;
@@ -184,7 +188,9 @@ void ZENTest_processBlock(const float **in, float **out, int chan_num, size_t si
 	stereoDelay.processBlock(delayProperties);
 }
 
-int firstFrame = 1;
-bool lastState = false, lastPlayState = false;
-
-int lastNote;
+UILabelsTypeDef &getUIValues(void)
+{
+	UIlabels[0] = (float)stereoDelay.getChannelDelay_ms(0);
+	UIlabels[1] = sliderInterpolator[SLIDER_DELAY].a_;
+	return UIlabels;
+}

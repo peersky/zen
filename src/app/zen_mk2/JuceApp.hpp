@@ -9,7 +9,6 @@
 #include "App.h"
 #include "stdlib.h"
 
-
 extern std::vector<juce::String> cSliderNames;
 
 extern std::vector<juce::String> cButtonNames;
@@ -47,5 +46,7 @@ void setSliderValue(String name, float val);
 void JuceAppInit(double sampleRate, int samplesPerBlock);
 void JuceAppNoteOn(int midiNoteNumber, float velocity);
 void JuceAppNoteOff(int midiNoteNumber);
+
+void setLabelValue(float (&pVal)[SLIDER_NUM_ENUM]);
 
 void JuceApp_processBlock(const float **in, float **out, int chan_num, size_t size);

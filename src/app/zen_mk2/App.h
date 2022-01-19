@@ -30,6 +30,7 @@
 #include "../../modules/utils/tables.h"
 #include "../../modules/zen.h"
 #include "AppWrapper.h"
+#include <array>
 
 //ZEN API
 void setDebugStuff(float *ch1, float *ch2, size_t size);
@@ -40,3 +41,7 @@ void ZENTest_block(void);
 void ZENTest_end(void);
 void ZENTest_noteOn(int midiNoteNumber, float velocity);
 void ZENTest_noteOff(int midiNoteNumber);
+using slider = std::array<float, 2048>;
+using zenSliders = std::array<slider, SLIDER_NUM_ENUM>;
+typedef float UILabelsTypeDef[SLIDER_NUM_ENUM];
+UILabelsTypeDef &getUIValues(void);
