@@ -1,6 +1,10 @@
 # ZEN - Signal processing as form of meditation
 
-This is template for embedded projects with STM32 and JUCE based simulators
+This repository contains highly optimized, sharp Occama blade for audio signal processing
+It's multiplatform. You can build it as VST/Desktop/Mobile/Whatever via JUCE
+or go embedded world trough STM32 target
+
+Feel free to add your own target as PR
 
 ## Compile
 
