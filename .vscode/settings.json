@@ -1,4 +1,5 @@
 {
+  "git.detectSubmodules": false,
   "cmake.statusbar.advanced": {
     "debug": {
       "visibility": "hidden"
@@ -15,7 +16,6 @@
   },
 
   "cmake.buildDirectory": "${workspaceRoot}/build/${variant:buildTarget}",
-  // "cmake.configureArgs": ["-D${variant:project}"],
   "python.linting.enabled": false,
   "cmake.generator": "Ninja",
   "files.associations": {
@@ -68,7 +68,49 @@
     "__memory": "cpp",
     "filesystem": "cpp",
     "ratio": "cpp",
-    "regex": "cpp"
+    "regex": "cpp",
+    "__bits": "cpp",
+    "__config": "cpp",
+    "__debug": "cpp",
+    "__errc": "cpp",
+    "__hash_table": "cpp",
+    "__locale": "cpp",
+    "__mutex_base": "cpp",
+    "__nullptr": "cpp",
+    "__split_buffer": "cpp",
+    "__string": "cpp",
+    "__threading_support": "cpp",
+    "__tree": "cpp",
+    "__tuple": "cpp",
+    "cctype": "cpp",
+    "clocale": "cpp",
+    "codecvt": "cpp",
+    "condition_variable": "cpp",
+    "cstdarg": "cpp",
+    "cstdint": "cpp",
+    "cstdio": "cpp",
+    "cstdlib": "cpp",
+    "cstring": "cpp",
+    "ctime": "cpp",
+    "cwchar": "cpp",
+    "cwctype": "cpp",
+    "fstream": "cpp",
+    "initializer_list": "cpp",
+    "iomanip": "cpp",
+    "ios": "cpp",
+    "iostream": "cpp",
+    "mutex": "cpp",
+    "semaphore": "cpp",
+    "sstream": "cpp",
+    "stdexcept": "cpp",
+    "streambuf": "cpp",
+    "strstream": "cpp",
+    "thread": "cpp",
+    "typeindex": "cpp",
+    "typeinfo": "cpp",
+    "shared_mutex": "cpp",
+    "stop_token": "cpp",
+    "cfenv": "cpp",
+    "cinttypes": "cpp"
   }
-  // "cmake.buildArgs": ["-fdiagnostics-color=always"]
 }
