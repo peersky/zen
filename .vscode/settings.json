@@ -1,5 +1,8 @@
 {
   "git.detectSubmodules": false,
+  "cmake.debugConfig": {
+    "miDebuggerPath": "define/your/path/here"
+  },
   "cmake.statusbar.advanced": {
     "debug": {
       "visibility": "hidden"
