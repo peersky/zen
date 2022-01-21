@@ -169,14 +169,14 @@ void ZENTest_processBlock(const float **in, float **out, int chan_num, size_t si
 	wave.setFreq(waveFreq);
 	float LFOVals[size];
 	lfo.processBlock(LFOVals, &sliders_blocks[SLIDER_LFO_FREQ][0], size);
-	// wave.processBlock(out[0], sliders_blocks[SLIDER_LFO_FREQ], size);
+	// wave.processBlock(out[0], &sliders_blocks[SLIDER_LFO_FREQ][0], size);
 	// memcpy(out[0], in[0], 4 * size);
 	// memcpy(out[1], out[0], 4 * size);
 
-	stereoReverb.setFeedbackType(zen::FEEDBACK_TYPE_PING_PONG);
-	stereoReverb.processBlock((const float **)in, out, &sliders_blocks[SLIDER_DELAY][0], (float **)delay_offsets, size, &sliders_blocks[SLIDER_FEEDBACK][0], 0.5f);
-	// delayProperties.delay = &sliders_blocks[SLIDER_DELAY][0];
-	// delayProperties.feedback = &sliders_blocks[SLIDER_FEEDBACK][0];
+	// stereoReverb.setFeedbackType(zen::FEEDBACK_TYPE_PING_PONG);
+	// stereoReverb.processBlock((const float **)in, out, &sliders_blocks[SLIDER_DELAY][0], (float **)delay_offsets, size, &sliders_blocks[SLIDER_FEEDBACK][0], 0.5f);
+	delayProperties.delay = &sliders_blocks[SLIDER_DELAY][0];
+	delayProperties.feedback = &sliders_blocks[SLIDER_FEEDBACK][0];
 	float preDelay[1] = {0};
 	float outGain[1] = {1};
 	delayProperties.outGain = outGain;
@@ -186,7 +186,10 @@ void ZENTest_processBlock(const float **in, float **out, int chan_num, size_t si
 	delayProperties.io = out;
 	delayProperties.size = size;
 
-	// stereoDelay.processBlock(delayProperties);
+	sendToAnalyzer((float *)out[1], 1);
+	// sendToAnalyzer(out[1], 1);
+
+	stereoDelay.processBlock(delayProperties);
 }
 
 UILabelsTypeDef &getUIValues(void)

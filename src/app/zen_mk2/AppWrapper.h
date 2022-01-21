@@ -60,7 +60,8 @@ extern "C"
     float getSliderValue(SlidersEnum i);
     void slidersConstruct();
     void setSliderValue(SlidersEnum slider, float val);
-
+    void setDebugStuff(float *ptr1, float *ptr2, int size);
+    void sendToAnalyzer(float *ptr, int ch);
 #ifdef __cplusplus
 }
 #endif

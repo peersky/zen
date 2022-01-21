@@ -244,3 +244,19 @@ void JuceApp_processBlock(const float **in, float **out, int chan_num, size_t si
 
     ZENTest_processBlock(in, out, chan_num, size);
 }
+
+float *bufferPtr1, *bufferPtr2;
+int bufferSize;
+
+void setDebugStuff(float *ptr1, float *ptr2, int size)
+{
+    printf("setDebugStuff\n");
+    bufferSize = size;
+    bufferPtr1 = ptr1;
+    bufferPtr2 = ptr2;
+}
+void sendToAnalyzer(float *ptr, int ch)
+{
+    // printf("sendToAnalyzer\n");
+    memcpy(bufferPtr1, ptr, bufferSize);
+}
