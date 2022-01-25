@@ -196,5 +196,6 @@ UILabelsTypeDef &getUIValues(void)
 {
 	UIlabels[0] = (float)stereoDelay.getChannelDelay_ms(0);
 	UIlabels[1] = sliderInterpolator[SLIDER_DELAY].a_;
+	UIlabels[2] = sliders_blocks[SLIDER_FEEDBACK][0];
 	return UIlabels;
 }

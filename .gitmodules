@@ -6,3 +6,6 @@
 	path = 3rd_party/JUCE
 	url = https://github.com/juce-framework/JUCE.git
 	ignore = dirty
+[submodule "3rd_party/drowaudio/3rd_party/drowaudio"]
+	path = 3rd_party/drowaudio/3rd_party/drowaudio
+	url = git@github.com:FigBug/drowaudio.git
