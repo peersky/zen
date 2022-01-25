@@ -114,6 +114,7 @@
     "shared_mutex": "cpp",
     "stop_token": "cpp",
     "cfenv": "cpp",
-    "cinttypes": "cpp"
+    "cinttypes": "cpp",
+    "*.mm": "cpp"
   }
 }
