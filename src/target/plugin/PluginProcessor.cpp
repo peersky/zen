@@ -61,7 +61,6 @@ void ZenAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 
     JuceAppInit(sampleRate, samplesPerBlock);
     outputAnalyser_.setupAnalyser(int(sampleRate), float(sampleRate));
-    //	outputAnalyser.stopThread(1000);
     spectrumBuffer.setSize(2, samplesPerBlock);
     setDebugStuff(spectrumBuffer.getWritePointer(0), spectrumBuffer.getWritePointer(1), spectrumBuffer.getNumSamples());
     spectrumBuffer.setSize(2, samplesPerBlock);
@@ -97,20 +96,8 @@ void ZenAudioProcessor::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midi
         }
     }
 
-    //   const float* inPointerL = buffer.getReadPointer (0);
-    //   const float* inPointerR = buffer.getReadPointer (1);
-    //
-    //    float* outPointerL = buffer.getWritePointer( 0);
-    //    float* outPointerR = buffer.getWritePointer( 1);
-
     const float **in = buffer.getArrayOfReadPointers();
     float **out = buffer.getArrayOfWritePointers();
-
-    //    for (int samp = 0; samp < buffer.getNumSamples(); ++samp)
-    //    {
-    //        outPointerL[samp] = ZENTest_tick( (inPointerL[samp] + inPointerR[samp]) * 0.5f )/10.0f;
-    //        outPointerR[samp] = outPointerL[samp];
-    //    }
 
     JuceApp_processBlock(in, out, 2, buffer.getNumSamples());
     if (buffer.getNumSamples() != spectrumBuffer.getNumSamples())
@@ -119,10 +106,11 @@ void ZenAudioProcessor::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midi
         setDebugStuff(spectrumBuffer.getWritePointer(0), spectrumBuffer.getWritePointer(1), buffer.getNumSamples());
     }
 
-    //	ZENTest_tick( (inPointerL[samp] + inPointerR[samp]) * 0.5f )/10.0f;
-
     if (getActiveEditor() != nullptr)
+    {
         outputAnalyser_.addAudioData(spectrumBuffer, 0, getTotalNumOutputChannels());
+        scope_.addSamples(spectrumBuffer.getArrayOfReadPointers()[0], spectrumBuffer.getNumSamples());
+    }
 }
 
 //==============================================================================

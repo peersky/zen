@@ -76,6 +76,7 @@ public:
 
     juce::Point<int> getSavedSize() const;
     void setSavedSize(const juce::Point<int> &size);
+    drow::TriggeredScope scope_;
 
 private:
     uint64 timer_;

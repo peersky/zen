@@ -137,6 +137,8 @@ private:
 	OwnedArray<TextEditor> textFields_;
 	OwnedArray<ComboBox> comboBoxes_;
 	OwnedArray<Label> labels_;
+	Slider scopeSliderX_;
+	Slider scopeSliderY_;
 
 	juce::Rectangle<int> plotFrame_;
 	juce::Rectangle<int> brandingFrame_;

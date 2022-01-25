@@ -33,21 +33,21 @@ static float maxDB = 12.0f;
 static float minDB = -120.0f;
 juce::Path tempPath;
 juce::Path zenPath;
-void createZenCircle(juce::Path &p)
+void createZenCircle(juce::Path &p, Graphics &g)
 {
+	float centerX = 900;
+	float centerY = 80;
+	static float r = 60;
+	g.setColour(juce::Colours::white);
+	g.fillEllipse(centerX - r, centerY - r, 120, 120);
 	p.clear();
-
-	//	juce::ScopedLock lockedForReading (pathCreationLock);
+	g.setColour(juce::Colours::black);
 
 	static float rotation = 3 * ZEN_PI;
 	rotation += 0.03f;
 	float sinus = sin(rotation);
 	float cosinus = cos(rotation);
 
-	float centerX = 400;
-	float centerY = 260;
-
-	static float r = 60;
 	float mp = r / 2;
 
 	int numRotations = roundToInt(rotation / (2 * ZEN_PI));
@@ -90,17 +90,27 @@ UIComponent::UIComponent(ZenAudioProcessor &p) : freqProcessor_(p)
 		sliderLabels_[i]->attachToComponent(sliders_[i], false); // [4]
 		addAndMakeVisible(sliderLabels_[i]);
 
-		//		sliderLabels.set(i,   new Label());
-		//		sliderLabels[i]->setName(cSliderNames[i]);
-		//		sliderLabels[i]->setColour(Label::textColourId, Colours::aliceblue);
-		//		sliderLabels[i]->setText(cSliderNames[i], NotificationType::dontSendNotification);
-		//		addAndMakeVisible(sliderLabels[i]);
-		//
-		//		textFields.set(i, new TextEditor());
-		//		textFields[i]->addListener(this);
-		//		textFields[i]->setName(cSliderNames[i]);
-		//		textFields[i]->setEnabled(false);
-		//		addAndMakeVisible(textFields[i]);
+		scopeSliderX_.setSliderStyle(juce::Slider::Rotary);
+		scopeSliderX_.setRange(1.0f, 128.0f, 1.0f);
+		scopeSliderX_.setName("X");
+		scopeSliderX_.addListener(this);
+		scopeSliderX_.setLookAndFeel(&otherLookAndFeel_);
+		scopeSliderX_.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 25);
+		scopeSliderX_.setNumDecimalPlacesToDisplay(2);
+		scopeSliderX_.setValue(0.2f);
+		scopeSliderX_.setTextValueSuffix("X");
+		addAndMakeVisible(scopeSliderX_);
+
+		scopeSliderY_.setSliderStyle(juce::Slider::Rotary);
+		scopeSliderY_.setRange(0.001f, 1.0f, 0.001f);
+		scopeSliderY_.setName("Y");
+		scopeSliderY_.addListener(this);
+		scopeSliderY_.setLookAndFeel(&otherLookAndFeel_);
+		scopeSliderY_.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 25);
+		scopeSliderY_.setNumDecimalPlacesToDisplay(2);
+		scopeSliderY_.setValue(1.0f);
+		scopeSliderY_.setTextValueSuffix("Y");
+		addAndMakeVisible(scopeSliderY_);
 	}
 
 	for (int i = 0; i < cButtonNames.size(); i++)
@@ -147,26 +157,23 @@ UIComponent::UIComponent(ZenAudioProcessor &p) : freqProcessor_(p)
 		addAndMakeVisible(labels_[_vi]);
 	}
 
-	//	labels.set(0, new Label());
-	//
-	//	labels[0]->setText(String(123), juce::dontSendNotification);
-	//	labels[0]->setColour (juce::Label::textColourId, juce::Colours::lightgreen);
-	//	addAndMakeVisible (labels[0]);
-
 	analyserPath_.setFill(Colours::transparentWhite);
 	analyserPath_.setStrokeType(juce::PathStrokeType(1.0));
 	analyserPath_.setStrokeFill(juce::Colours::silver);
 	addAndMakeVisible(&analyserPath_);
 
-	createZenCircle(zenPath);
+	freqProcessor_.scope_.setTriggerMode(drow::TriggeredScope::TriggerMode::Up);
+	addAndMakeVisible(&freqProcessor_.scope_);
 
 	startTimerHz(20);
 }
 
 void UIComponent::timerCallback(void)
 {
+	freqProcessor_.scope_.setTriggerLevel(scopeSliderY_.getValue());
+	int samplesPerPixel = (int)(scopeSliderX_.getValue());
+	freqProcessor_.scope_.setNumSamplesPerPixel(samplesPerPixel);
 	for (int i = 0; i < cSliderNames.size(); i++)
-		//		textFields[i]->setText(String(cSliderValues[i]), false);
 
 		for (int i = 0; i < cLabelNames.size(); i++)
 		{
@@ -176,35 +183,19 @@ void UIComponent::timerCallback(void)
 
 	if (freqProcessor_.checkForNewAnalyserData())
 	{
-		//		analyserPath.setVisible(true);
-
-		//		static int counter = 0;
-		//		if (counter<0)
-		//		{
-		//			counter++;
-		//		}
-		//		else
 		{
-			//			counter=0;
 			freqProcessor_.createAnalyserPlot(tempPath, plotFrame_, 20.0f);
 			analyserPath_.setPath(tempPath);
-			//		analyserPath.setBounds
 		}
 	}
 	for (int i = 0; i < cSliderNames.size(); i++)
 	{
 		sliders_[i]->setValue(cSliderValues[i]);
 	}
-	//	createZenCircle(zenPath);
-	//		repaint ();
-
-	//ToDo: Need to implement getters from app to pass in here
-   
-    // setLabelValue();
+	repaint();
 
 	UILabelsTypeDef &ref = getUIValues();
 	setLabelValue(ref);
-
 }
 
 void UIComponent::textEditorTextChanged(TextEditor &tf)
@@ -218,21 +209,11 @@ UIComponent::~UIComponent()
 void UIComponent::paint(Graphics &g)
 
 {
-	/* This demo code just fills the component's background and
-	 draws some placeholder text to get you started.
-
-	 You should replace everything in this method with your own
-	 drawing code..
-	 */
 
 	g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
 	g.fillAll(Colours::slategrey); // clear the background
 
-	g.setColour(juce::Colours::white);
-	//	g.drawEllipse (500, 200, 120, 120, 3);
-	g.fillEllipse(340, 200, 120, 120);
-	g.setColour(juce::Colours::black);
-	createZenCircle(zenPath);
+	createZenCircle(zenPath, g);
 	g.strokePath(zenPath, juce::PathStrokeType(1.0));
 	g.fillPath(zenPath);
 
@@ -271,10 +252,7 @@ void UIComponent::paint(Graphics &g)
 
 	g.reduceClipRegion(plotFrame_);
 
-	//	freqProcessor.createAnalyserPlot (tempPath, plotFrame, 20.0f);
-	//	g.setColour (inputColour);
 	g.drawFittedText("Output", plotFrame_.reduced(8), juce::Justification::topRight, 1);
-	//	g.strokePath (tempPath, juce::PathStrokeType (1.0));
 }
 
 void UIComponent::resized()
@@ -282,7 +260,7 @@ void UIComponent::resized()
 
 	for (int i = 0; i < labels_.size(); i++)
 	{
-		int x = i < labels_.size() / 2 ? 380 : 420;
+		int x = i < labels_.size() / 2 ? 320 : 420;
 		int y = i >= labels_.size() / 2 ? 20 * (i - labels_.size() / 2) : 20 * i;
 
 		labels_[i]->setBounds(x + 150, y + 200, getWidth() - 0, 30);
@@ -298,10 +276,23 @@ void UIComponent::resized()
 	}
 
 	freqProcessor_.setSavedSize({getWidth(), getHeight()});
-	plotFrame_.setBounds(150 + cLeftOffset_,
+	plotFrame_.setBounds(cLeftOffset_,
 						 400 - cTopOffset_,
 						 400,
 						 200);
+	freqProcessor_.scope_.setBounds(420 + cLeftOffset_,
+									400 - cTopOffset_,
+									400,
+									200);
+
+	scopeSliderX_.setBounds(840 + cLeftOffset_,
+							400 - cTopOffset_,
+							cSliderWidth_,
+							cSliderHeight_);
+	scopeSliderY_.setBounds(840 + cLeftOffset_,
+							500 - cTopOffset_,
+							cSliderWidth_,
+							cSliderHeight_);
 }
 
 void UIComponent::sliderValueChanged(Slider *s)
