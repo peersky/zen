@@ -15,6 +15,7 @@ cmake_minimum_required(VERSION 3.15)
 # directories, and the current project version. This is a standard CMake command.
 
 project(AUDIO_PLUGIN_EXAMPLE VERSION 0.0.1)
+juce_add_module("/Users/t/GitHub/zen/3rd_party/drowaudio/3rd_party/drowaudio/module/dRowAudio" ALIAS_NAMESPACE dRowAudio)
 
 # If you've installed JUCE somehow (via a package manager, or directly using the CMake install
 # target), you'll need to tell this project that it depends on the installed copy of JUCE. If you've
@@ -110,4 +111,5 @@ target_link_libraries(AudioPluginExample
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags
-        juce::juce_dsp)
+        juce::juce_dsp
+        dRowAudio)
