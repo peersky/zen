@@ -38,7 +38,7 @@ std::vector<juce::String> cSliderNames(SLIDER_NUM_ENUM);
 std::vector<juce::String> cLabelNames = std::vector<juce::String>{
     "Freq",
     "Alpha",
-    "Beta",
+    "Feedback level",
     "Omega",
 };
 
